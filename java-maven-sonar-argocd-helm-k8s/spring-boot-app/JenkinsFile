@@ -13,7 +13,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        git branch: 'main', url: 'https://github.com/vilas-chavan/Jenkins-K8s-Agrocd.git'
+        git branch: 'master', url: 'https://github.com/vilas-chavan/Jenkins-K8s-Agrocd.git'
       }
     }
     stage('Build and Test') {
