@@ -6,8 +6,6 @@ pipeline {
     }
   }
 
-  environment{
-        SCANNER_HOME= tool 'sonar-scanner'
   }
   stages {
     stage('Checkout') {
@@ -24,23 +22,13 @@ pipeline {
       }
     }
 
-    //stage('Static Code Analysis') {
-    //  environment {
-    //    SONAR_URL = "http://65.0.105.140:9000"
-    //  }
-    //  steps {
-    //    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-    //      sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-    //    }
-    //  }
-    //}
-
-    stage('Sonarqube Analysis') {
+    stage('Static Code Analysis') {
+      environment {
+        SONAR_URL = "http://65.0.105.140:9000"
+      }
       steps {
-        withSonarQubeEnv('sonar') {
-        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=santa \
-       -Dsonar.projectKey=santa -Dsonar.java.binaries=. '''
-                    
+        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+          sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
         }
       }
     }
